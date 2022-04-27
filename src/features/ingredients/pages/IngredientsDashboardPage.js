@@ -42,7 +42,7 @@ export default function IngredientsDashboard() {
             <Typography variant="h4" sx={{ marginBottom: 2 }}>
                 Last added ingredients
             </Typography>
-            <SimpleTable />
+            <SimpleTable data={[]} />
             <Box sx={{ marginY: 4, textAlign: 'right'}}>
                 <Button variant="contained" size="large" color="secondary">
                     See All
@@ -51,7 +51,7 @@ export default function IngredientsDashboard() {
             <Typography variant="h4" sx={{ marginBottom: 2 }}>
                 Need Review
             </Typography>
-            <SimpleTable />
+            <SimpleTable data={[]}  />
             <Box sx={{ marginY: 4, textAlign: 'right'}}>
                 <Button variant="contained" size="large" color="secondary">
                     See All

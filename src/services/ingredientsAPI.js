@@ -10,3 +10,15 @@ export async function postIngredient(ingredient) {
         }
     }
 }
+
+
+export async function fetchIngredients() {
+    try {
+        const response = await api.get('/api/ingredients')
+        return response.data
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}

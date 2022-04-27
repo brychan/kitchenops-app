@@ -9,7 +9,6 @@ const Alert = forwardRef(function Alert(props, ref) {
 
 export default function SnackBar() {
     const snackbar = useContext(SnackBarContext)
-    console.log(snackbar)
     return (
         <Snackbar open={snackbar.open} autoHideDuration={snackbar.message.duration} onClose={snackbar.handleClose}>
             <Alert
