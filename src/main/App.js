@@ -23,7 +23,6 @@ const theme = createTheme({
     typography: {
         fontFamily: fontSans,
         h5: {
-            fontWeight: 600,
             letterSpacing: -1,
             color: blueGrey[900],
         },

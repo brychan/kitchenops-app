@@ -11,10 +11,11 @@ export async function postIngredient(ingredient) {
     }
 }
 
-
-export async function fetchIngredients() {
+export async function fetchIngredients(filter) {
     try {
-        const response = await api.get('/api/ingredients')
+        const response = await api.get('/api/ingredients', {
+            params: filter,
+        })
         return response.data
     } catch (error) {
         if (error & error.response) {
