@@ -23,3 +23,14 @@ export async function fetchIngredients(filter) {
         }
     }
 }
+
+export async function fetchCategoryIngredients() {
+    try {
+        const response = await api.get('/api/ingredients/categories')
+        return response.data
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}

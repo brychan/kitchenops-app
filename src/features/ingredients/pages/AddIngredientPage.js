@@ -3,18 +3,23 @@ import {
     Typography,
     Paper,
     Box,
-    Grid,
     Button,
     FormControl,
     InputLabel,
     Select,
     MenuItem,
+    Chip,
+    ListItem,
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { SnackBarContext } from '../../../context/SnackBarContext'
 import { useInput } from '../../../hooks/useInput'
-import { postIngredient } from '../../../services/ingredientsAPI'
+import {
+    postIngredient,
+    fetchCategoryIngredients,
+} from '../../../services/ingredientsAPI'
+import AutocompleteCategories from '../AutocompleteCategories'
 
 const AddIngTextField = ({ value, setValue, required }) => {
     return (
@@ -35,20 +40,17 @@ const AddIngTextField = ({ value, setValue, required }) => {
 
 const itemRowArgs = (borderBottom, extraStyles = {}) => {
     return {
-        xs: 12,
-        sm: 12,
-        md: 6,
         sx: !borderBottom
             ? {
                   borderBottom: { md: '1px solid', sm: 0 },
                   borderColor: { md: grey[300], sm: 0 },
-                  paddingBottom: 2,
+                  paddingY: 2,
                   ...extraStyles,
               }
             : {
                   borderBottom: '1px solid',
                   borderColor: grey[300],
-                  paddingBottom: 2,
+                  paddingY: 2,
                   ...extraStyles,
               },
     }
@@ -62,8 +64,11 @@ const AddIngredientPage = () => {
     const code_provider = useInput('')
     const code_internal = useInput('')
     const [provider, setProvider] = useState('')
-
-
+    const [selectedCategories, setSelectedCategories] = useState([])
+    const [categories, setCategories] = useState([])
+    useEffect(() => {
+        fetchCategoryIngredients().then((res) => setCategories(res.results))
+    }, [])
     const handleSubmit = () => {
         postIngredient({
             name: name.value,
@@ -71,10 +76,69 @@ const AddIngredientPage = () => {
             brand: brand.value,
             code_provider: code_provider.value,
             code_internal: code_internal.value,
+            categories,
             //provider,
-        }).then((res) => {
-            snackbar.setAlert('success', `Ingredient ${name.value} has been added to your Library.`)
         })
+            .then((res) => {
+                if (res.status >= 200 && res.status <= 300)
+                    snackbar.setAlert(
+                        'success',
+                        `Ingredient ${name.value} has been added to your Library.`
+                    )
+                else
+                    snackbar.setAlert(
+                        'error',
+                        'There was an error, please try again later.'
+                    )
+            })
+            .catch((err) =>
+                snackbar.setAlert(
+                    'error',
+                    'There was an error, please try again later.'
+                )
+            )
+    }
+    const handleCategoryDelete = (chipToDelete) => () => {
+        setSelectedCategories((chips) =>
+            chips.filter((chip) => chip.id !== chipToDelete.id)
+        )
+    }
+
+    let ChipCategories = ({ selectedCategories, handleDelete }) => {
+        return (
+            <Paper
+                sx={{
+                    margin: '1.5rem 0 0 0',
+                    padding: 0,
+                }}
+                component="ul"
+            >
+                {selectedCategories.map((data) => {
+                    return (
+                        <ListItem
+                            key={data.id}
+                            sx={{
+                                display: 'inline',
+                                margin: 0,
+                                paddingY: 0,
+                                paddingX: 1,
+                            }}
+                        >
+                            <Chip
+                                label={data.name}
+                                onDelete={handleDelete(data)}
+                                sx={{
+                                    backgroundColor: data.color,
+                                    fontWeight: 500,
+                                    fontSize: 14,
+                                    padding: 1,
+                                }}
+                            />
+                        </ListItem>
+                    )
+                })}
+            </Paper>
+        )
     }
 
     return (
@@ -105,63 +169,96 @@ const AddIngredientPage = () => {
                     information later on.
                 </Typography>
                 <Box sx={{ marginTop: 4 }} />
-                <Grid
-                    container
-                    spacing={2}
+                <Box
                     sx={{
-                        alignItems: 'center',
+                        display: 'grid',
+                        gridTemplateColumns: {
+                            xs: 'repeat(1,1fr)',
+                            md: 'repeat(2,1fr)',
+                        },
                     }}
                 >
-                    <Grid item {...itemRowArgs(false)}>
+                    <Box {...itemRowArgs(false)}>
                         <Typography variant="h6">Name</Typography>
                         <Typography variant="smallBody">
                             A short name you want to give to the ingredient.
                         </Typography>
-                    </Grid>
-                    <Grid item {...itemRowArgs(true)}>
+                    </Box>
+                    <Box {...itemRowArgs(true)}>
                         <AddIngTextField
                             value={name.value}
                             setValue={name.setValue}
                             required
                         />
-                    </Grid>
-                    <Grid item {...itemRowArgs(false)}>
+                    </Box>
+                    <Box {...itemRowArgs(false)}>
                         <Typography variant="h6">Descriptive Name</Typography>
                         <Typography variant="smallBody">
                             A longer, more descriptive name, which will help
                             identify the ingredient.
                         </Typography>
-                    </Grid>
-                    <Grid item {...itemRowArgs(true)}>
+                    </Box>
+                    <Box {...itemRowArgs(true)}>
                         <AddIngTextField
                             value={description.value}
                             setValue={description.setValue}
                         />
-                    </Grid>
-                    <Grid item {...itemRowArgs(false)}>
+                    </Box>
+                    <Box {...itemRowArgs(false)}>
                         <Typography variant="h6">Brand</Typography>
                         <Typography variant="smallBody">
                             The ingredient's brand, producer, manufacturer, etc.
                         </Typography>
-                    </Grid>
-                    <Grid item {...itemRowArgs(true)}>
+                    </Box>
+                    <Box {...itemRowArgs(true)}>
                         <AddIngTextField
                             value={brand.value}
                             setValue={brand.setValue}
                         />
-                    </Grid>
-                    <Grid item {...itemRowArgs(false)}>
+                    </Box>
+                    <Box {...itemRowArgs(false)}>
+                        <Typography variant="h6">Categories</Typography>
+                        <Typography variant="smallBody">
+                            The identification code that you want to use
+                            internally.
+                        </Typography>
+                        <ChipCategories
+                            handleDelete={handleCategoryDelete}
+                            selectedCategories={selectedCategories}
+                        />
+                    </Box>
+                    <Box
+                        {...itemRowArgs(false, {
+                            display: { xs: 0, sm: 0, md: 'flex' },
+                            alignItems: 'center',
+                            justifyContent: 'end',
+                            gap: 2,
+                        })}
+                    >
+                        <AutocompleteCategories
+                            labels={categories}
+                            value={selectedCategories}
+                            setValue={setSelectedCategories}
+                        />
+                        <Button
+                            variant="contained"
+                            size="large"
+                            color="primary"
+                        >
+                            Create Category
+                        </Button>
+                    </Box>
+                    <Box {...itemRowArgs(false)}>
                         <Typography variant="h6">Provider</Typography>
                         <Typography variant="smallBody">
                             Choose from your saved providers, or quickly add
                             one.
                         </Typography>
-                    </Grid>
-                    <Grid
-                        item
+                    </Box>
+                    <Box
                         {...itemRowArgs(true, {
                             display: { xs: 0, sm: 0, md: 'flex' },
-                            alignItems: 'center',
+                            alignBoxs: 'center',
                             gap: 2,
                         })}
                     >
@@ -198,36 +295,42 @@ const AddIngredientPage = () => {
                         >
                             Create Provider
                         </Button>
-                    </Grid>
-                    <Grid item {...itemRowArgs(false)}>
+                    </Box>
+
+                    <Box {...itemRowArgs(false)}>
                         <Typography variant="h6">Provider Code</Typography>
                         <Typography variant="smallBody">
                             The identification code that the Provider uses.
                         </Typography>
-                    </Grid>
-                    <Grid item {...itemRowArgs(true)}>
+                    </Box>
+                    <Box iem {...itemRowArgs(true)}>
                         <AddIngTextField
                             value={code_provider.value}
                             setValue={code_provider.setValue}
                         />
-                    </Grid>
-                    <Grid item {...itemRowArgs(false)}>
+                    </Box>
+                    <Box {...itemRowArgs(false)}>
                         <Typography variant="h6">Internal Code</Typography>
                         <Typography variant="smallBody">
                             The identification code that you want to use
                             internally.
                         </Typography>
-                    </Grid>
-                    <Grid item {...itemRowArgs(true)}>
+                    </Box>
+                    <Box {...itemRowArgs(true)}>
                         <AddIngTextField
                             value={code_internal.value}
                             setValue={code_internal.setValue}
                         />
-                    </Grid>
-                </Grid>
+                    </Box>
+                </Box>
                 <Box sx={{ marginTop: 4 }} />
                 <Box sx={{ textAlign: 'right' }}>
-                    <Button variant="contained" color="secondary" size="large" onClick={handleSubmit}>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        onClick={handleSubmit}
+                    >
                         Add Ingredient
                     </Button>
                 </Box>

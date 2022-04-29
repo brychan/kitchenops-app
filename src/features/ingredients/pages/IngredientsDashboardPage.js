@@ -27,7 +27,6 @@ export default function IngredientsDashboard() {
             total: 0
         },
     })
-    console.log(ingredients)
     useEffect(() => {
         Promise.all([fetchIngredients({ sort: ['created_at', 'DESC'] })]).then(
             (responses) => {

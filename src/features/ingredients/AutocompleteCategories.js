@@ -74,9 +74,8 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
     },
 }))
 
-export default function Test() {
+export default function AutocompleteCategories({ value, setValue, labels, sx }) {
     const [anchorEl, setAnchorEl] = React.useState(null)
-    const [value, setValue] = React.useState([labels[1], labels[11]])
     const [pendingValue, setPendingValue] = React.useState([])
     const theme = useTheme()
 
@@ -84,7 +83,7 @@ export default function Test() {
         setPendingValue(value)
         setAnchorEl(event.currentTarget)
     }
-    console.log(value)
+
     const handleClose = () => {
         setValue(pendingValue)
         if (anchorEl) {
@@ -102,11 +101,12 @@ export default function Test() {
                 <Button
                     variant="contained"
                     size="large"
-                    color="primary"
+                    color="secondary"
                     aria-describedby={id}
                     onClick={handleClick}
+                    sx={sx}
                 >
-                    Categories
+                    Search Categories
                 </Button>
             </Box>
             <StyledPopper
@@ -230,30 +230,3 @@ export default function Test() {
         </React.Fragment>
     )
 }
-
-const labels = [
-    {
-        name: 'Dry Food',
-        color: '#7057ff',
-    },
-    {
-        name: 'Vegetables',
-        color: '#008672',
-    },
-    {
-        name: 'Prepped Food',
-        color: '#b60205',
-    },
-    {
-        name: 'Grains',
-        color: '#d93f0b',
-    },
-    {
-        name: 'Proteins',
-        color: '#0e8a16',
-    },
-    {
-        name: 'Vegetarian',
-        color: '#fbca04',
-    },
-]
