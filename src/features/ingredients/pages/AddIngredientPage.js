@@ -19,6 +19,7 @@ import {
     postIngredient,
     fetchCategoryIngredients,
 } from '../../../services/ingredientsAPI'
+import { fetchProviders } from '../../../services/providersAPI'
 import AutocompleteCategories from '../AutocompleteCategories'
 
 const AddIngTextField = ({ value, setValue, required }) => {
@@ -64,10 +65,16 @@ const AddIngredientPage = () => {
     const code_provider = useInput('')
     const code_internal = useInput('')
     const [provider, setProvider] = useState('')
+    const [providerOptions, setProviderOptions] = useState([])
     const [selectedCategories, setSelectedCategories] = useState([])
     const [categories, setCategories] = useState([])
     useEffect(() => {
-        fetchCategoryIngredients().then((res) => setCategories(res.results))
+        Promise.all([fetchCategoryIngredients(), fetchProviders()]).then(
+            (results) => {
+                setCategories(results[0].results)
+                setProviderOptions(results[1].results)
+            }
+        )
     }, [])
     const handleSubmit = () => {
         postIngredient({
@@ -77,7 +84,7 @@ const AddIngredientPage = () => {
             code_provider: code_provider.value,
             code_internal: code_internal.value,
             categories,
-            //provider,
+            provider_id: provider ? provider : null,
         })
             .then((res) => {
                 if (res.status >= 200 && res.status <= 300)
@@ -104,7 +111,15 @@ const AddIngredientPage = () => {
         )
     }
 
-    let ChipCategories = ({ selectedCategories, handleDelete }) => {
+    const renderProviders = (providers) => {
+        return providers.map((provider) => (
+            <MenuItem key={provider.id} value={provider.id}>
+                {provider.name}
+            </MenuItem>
+        ))
+    }
+
+    const ChipCategories = ({ selectedCategories, handleDelete }) => {
         return (
             <Paper
                 sx={{
@@ -278,9 +293,7 @@ const AddIngredientPage = () => {
                                 onChange={(e) => setProvider(e.target.value)}
                                 value={provider}
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {renderProviders(providerOptions)}
                             </Select>
                         </FormControl>
                         <Button
