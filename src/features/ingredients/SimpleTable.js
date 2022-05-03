@@ -61,7 +61,7 @@ export default function SimpleTable({ data }) {
                                 {row.brand}
                             </StyledTableCell>
                             <StyledTableCell align="right">
-                                {row.provider}
+                                {row.provider && row.provider.name}
                             </StyledTableCell>
                             <StyledTableCell align="right">
                                 {row.code_provider}

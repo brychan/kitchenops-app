@@ -20,6 +20,8 @@ import {
     fetchCategoryIngredients,
 } from '../../../services/ingredientsAPI'
 import { fetchProviders } from '../../../services/providersAPI'
+import AddCategoryDialog from '../AddCategoryDialog'
+import AddProviderDialog from '../../providers/AddProviderDialog'
 import AutocompleteCategories from '../AutocompleteCategories'
 
 const AddIngTextField = ({ value, setValue, required }) => {
@@ -59,6 +61,7 @@ const itemRowArgs = (borderBottom, extraStyles = {}) => {
 
 const AddIngredientPage = () => {
     const snackbar = useContext(SnackBarContext)
+
     const name = useInput('')
     const description = useInput('')
     const brand = useInput('')
@@ -68,6 +71,33 @@ const AddIngredientPage = () => {
     const [providerOptions, setProviderOptions] = useState([])
     const [selectedCategories, setSelectedCategories] = useState([])
     const [categories, setCategories] = useState([])
+
+    /* DIALOG - CATEGORY */
+    const [openCategoryDialog, setOpenCategoryDialog] = useState(false)
+
+    const handleClickOpenDialog = () => {
+        setOpenCategoryDialog(true)
+    }
+    const handleCloseDialog = () => {
+        setOpenCategoryDialog(false)
+    }
+    const handleSuccessDialog = (category) => {
+        setCategories([...categories, category])
+    }
+
+    /* DIALOG - PROVIDER */
+    const [openProviderDialog, setOpenProviderDialog] = useState(false)
+
+    const handleClickOpenProviderDialog = () => {
+        setOpenProviderDialog(true)
+    }
+    const handleCloseProviderDialog = () => {
+        setOpenProviderDialog(false)
+    }
+    const handleSuccessProviderDialog = (provider) => {
+        setProviderOptions([...providerOptions, provider])
+    }
+
     useEffect(() => {
         Promise.all([fetchCategoryIngredients(), fetchProviders()]).then(
             (results) => {
@@ -76,6 +106,7 @@ const AddIngredientPage = () => {
             }
         )
     }, [])
+
     const handleSubmit = () => {
         postIngredient({
             name: name.value,
@@ -105,6 +136,7 @@ const AddIngredientPage = () => {
                 )
             )
     }
+
     const handleCategoryDelete = (chipToDelete) => () => {
         setSelectedCategories((chips) =>
             chips.filter((chip) => chip.id !== chipToDelete.id)
@@ -259,6 +291,7 @@ const AddIngredientPage = () => {
                             variant="contained"
                             size="large"
                             color="primary"
+                            onClick={handleClickOpenDialog}
                         >
                             Create Category
                         </Button>
@@ -300,6 +333,7 @@ const AddIngredientPage = () => {
                             variant="contained"
                             size="large"
                             color="primary"
+                            onClick={handleClickOpenProviderDialog}
                             sx={{
                                 alignSelf: 'center',
                                 float: 'right',
@@ -348,6 +382,16 @@ const AddIngredientPage = () => {
                     </Button>
                 </Box>
             </Paper>
+            <AddCategoryDialog
+                handleClose={handleCloseDialog}
+                open={openCategoryDialog}
+                onSuccess={handleSuccessDialog}
+            />
+            <AddProviderDialog
+                handleClose={handleCloseProviderDialog}
+                open={openProviderDialog}
+                onSuccess={handleSuccessProviderDialog}
+            />
         </Fragment>
     )
 }

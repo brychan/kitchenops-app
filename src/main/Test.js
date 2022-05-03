@@ -1,259 +1,149 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme, styled } from '@mui/material/styles'
-import Popper from '@mui/material/Popper'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Button from '@mui/material/Button'
+import { styled } from '@mui/material/styles'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
-import DoneIcon from '@mui/icons-material/Done'
-import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete'
-import { Button } from '@mui/material'
-import InputBase from '@mui/material/InputBase'
-import Box from '@mui/material/Box'
-
-const StyledAutocompletePopper = styled('div')(({ theme }) => ({
-    [`& .${autocompleteClasses.paper}`]: {
-        boxShadow: 'none',
-        margin: 0,
-        color: 'inherit',
-        fontSize: 16,
-    },
-    [`& .${autocompleteClasses.listbox}`]: {
-        backgroundColor: '#fff',
-        width: '100%',
-        padding: 0,
-        [`& .${autocompleteClasses.option}`]: {
-            minHeight: 'auto',
-            alignItems: 'flex-start',
-            padding: 8,
-            borderBottom: '1px solid #eaecef',
-            '&[aria-selected="true"]': {
-                backgroundColor: 'transparent',
-            },
-            '&[data-focus="true"], &[data-focus="true"][aria-selected="true"]':
-                {
-                    backgroundColor: theme.palette.action.hover,
-                },
-        },
-    },
-    [`&.${autocompleteClasses.popperDisablePortal}`]: {
-        position: 'relative',
-    },
-}))
-
-function PopperComponent(props) {
-    const { disablePortal, anchorEl, open, ...other } = props
-    return <StyledAutocompletePopper {...other} />
+import Typography from '@mui/material/Typography'
+import { Box, TextField } from '@mui/material'
+import { grey } from '@mui/material/colors'
+import { useInput } from '../hooks/useInput'
+const itemRowArgs = (borderBottom, extraStyles = {}) => {
+    return {
+        sx: !borderBottom
+            ? {
+                  borderBottom: { md: '1px solid', sm: 0 },
+                  borderColor: { md: grey[300], sm: 0 },
+                  paddingY: 2,
+                  ...extraStyles,
+              }
+            : {
+                  borderBottom: '1px solid',
+                  borderColor: grey[300],
+                  paddingY: 2,
+                  ...extraStyles,
+              },
+    }
 }
-
-const StyledPopper = styled(Popper)(({ theme }) => ({
-    border: '1px solid #e1e4e8',
-    boxShadow: '0 8px 24px rgba(149, 157, 165, 0.2)',
-    borderRadius: 6,
-    width: 350,
-    zIndex: theme.zIndex.modal,
-    fontSize: 13,
-    color: '#24292e',
-    backgroundColor: '#fff',
-}))
-
-const StyledInput = styled(InputBase)(({ theme }) => ({
-    padding: 10,
-    width: '100%',
-    borderBottom: '1px solid #eaecef',
-    '& input': {
-        borderRadius: 4,
-        backgroundColor: '#fff',
-        padding: 8,
-        transition: theme.transitions.create(['border-color', 'box-shadow']),
-        border: '#eaecef',
-        fontSize: 14,
-        '&:focus': {
-            boxShadow: '0px 0px 0px 3px rgba(3, 102, 214, 0.3)',
-            borderColor: '#0366d6',
-        },
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
     },
 }))
 
-export default function Test() {
-    const [anchorEl, setAnchorEl] = React.useState(null)
-    const [value, setValue] = React.useState([labels[1], labels[11]])
-    const [pendingValue, setPendingValue] = React.useState([])
-    const theme = useTheme()
-
-    const handleClick = (event) => {
-        setPendingValue(value)
-        setAnchorEl(event.currentTarget)
-    }
-    console.log(value)
-    const handleClose = () => {
-        setValue(pendingValue)
-        if (anchorEl) {
-            anchorEl.focus()
-        }
-        setAnchorEl(null)
-    }
-
-    const open = Boolean(anchorEl)
-    const id = open ? 'github-label' : undefined
+const BootstrapDialogTitle = (props) => {
+    const { children, onClose, ...other } = props
 
     return (
-        <React.Fragment>
-            <Box>
-                <Button
-                    variant="contained"
-                    size="large"
-                    color="primary"
-                    aria-describedby={id}
-                    onClick={handleClick}
+        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+            {children}
+            {onClose ? (
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
                 >
-                    Categories
-                </Button>
-            </Box>
-            <StyledPopper
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                placement="bottom-start"
-            >
-                <ClickAwayListener onClickAway={handleClose}>
-                    <div>
-                        <Autocomplete
-                            open
-                            multiple
-                            onClose={(event, reason) => {
-                                if (reason === 'escape') {
-                                    handleClose()
-                                }
-                            }}
-                            value={pendingValue}
-                            onChange={(event, newValue, reason) => {
-                                if (
-                                    event.type === 'keydown' &&
-                                    event.key === 'Backspace' &&
-                                    reason === 'removeOption'
-                                ) {
-                                    return
-                                }
-                                setPendingValue(newValue)
-                            }}
-                            disableCloseOnSelect
-                            PopperComponent={PopperComponent}
-                            renderTags={() => null}
-                            noOptionsText="No labels"
-                            renderOption={(props, option, { selected }) => (
-                                <li {...props}>
-                                    <Box
-                                        component={DoneIcon}
-                                        sx={{
-                                            width: 17,
-                                            height: 17,
-                                            mr: '5px',
-                                            ml: '-2px',
-                                        }}
-                                        style={{
-                                            visibility: selected
-                                                ? 'visible'
-                                                : 'hidden',
-                                        }}
-                                    />
-                                    <Box
-                                        component="span"
-                                        sx={{
-                                            width: 20,
-                                            height: 20,
-                                            flexShrink: 0,
-                                            borderRadius: '3px',
-                                            mr: 1,
-                                            mt: '2px',
-                                        }}
-                                        style={{
-                                            backgroundColor: option.color,
-                                        }}
-                                    />
-                                    <Box
-                                        sx={{
-                                            flexGrow: 1,
-                                            '& span': {
-                                                color:
-                                                    theme.palette.mode ===
-                                                    'light'
-                                                        ? '#586069'
-                                                        : '#8b949e',
-                                            },
-                                        }}
-                                    >
-                                        {option.name}
-                                        <br />
-                                    </Box>
-                                    <Box
-                                        component={CloseIcon}
-                                        sx={{
-                                            opacity: 0.6,
-                                            width: 18,
-                                            height: 18,
-                                        }}
-                                        style={{
-                                            visibility: selected
-                                                ? 'visible'
-                                                : 'hidden',
-                                        }}
-                                    />
-                                </li>
-                            )}
-                            options={[...labels].sort((a, b) => {
-                                // Display the selected labels first.
-                                let ai = value.indexOf(a)
-                                ai =
-                                    ai === -1
-                                        ? value.length + labels.indexOf(a)
-                                        : ai
-                                let bi = value.indexOf(b)
-                                bi =
-                                    bi === -1
-                                        ? value.length + labels.indexOf(b)
-                                        : bi
-                                return ai - bi
-                            })}
-                            getOptionLabel={(option) => option.name}
-                            renderInput={(params) => (
-                                <StyledInput
-                                    ref={params.InputProps.ref}
-                                    inputProps={params.inputProps}
-                                    autoFocus
-                                    placeholder="Filter labels"
-                                />
-                            )}
-                        />
-                    </div>
-                </ClickAwayListener>
-            </StyledPopper>
-        </React.Fragment>
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </DialogTitle>
     )
 }
 
-const labels = [
-    {
-        name: 'Dry Food',
-        color: '#7057ff',
-    },
-    {
-        name: 'Vegetables',
-        color: '#008672',
-    },
-    {
-        name: 'Prepped Food',
-        color: '#b60205',
-    },
-    {
-        name: 'Grains',
-        color: '#d93f0b',
-    },
-    {
-        name: 'Proteins',
-        color: '#0e8a16',
-    },
-    {
-        name: 'Vegetarian',
-        color: '#fbca04',
-    },
-]
+BootstrapDialogTitle.propTypes = {
+    children: PropTypes.node,
+    onClose: PropTypes.func.isRequired,
+}
+
+export default function Test() {
+    const [open, setOpen] = React.useState(false)
+    const name = useInput('')
+    const description = useInput('')
+
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+    const handleClose = () => {
+        setOpen(false)
+    }
+    const onSubmit = () => {}
+
+    return (
+        <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+                Open dialog
+            </Button>
+            <BootstrapDialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+            >
+                <BootstrapDialogTitle
+                    id="customized-dialog-title"
+                    onClose={handleClose}
+                >
+                    Create New Provider
+                </BootstrapDialogTitle>
+                <DialogContent dividers>
+                <Box
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: {
+                        xs: 'repeat(1,1fr)',
+                        md: 'repeat(2,1fr)',
+                    },
+                }}
+            >
+                <Box {...itemRowArgs(false)}>Name</Box>
+                <Box {...itemRowArgs(true)}>
+                    <TextField
+                        required
+                        label="Required"
+                        type="text"
+                        color="secondary"
+                        value={name.value}
+                        onChange={(e) => name.setValue(e.target.value)}
+                        sx={{ width: '100%' }}
+                    />
+                </Box>
+                <Box {...itemRowArgs(true, {border: 0})}>Description</Box>
+                <Box {...itemRowArgs(true, {border: 0})}>
+                    <TextField
+                        required
+                        label="Required"
+                        type="text"
+                        color="secondary"
+                        value={description.value}
+                        onChange={(e) => description.setValue(e.target.value)}
+                        sx={{ width: '100%' }}
+                    />
+                </Box>
+            </Box>
+                </DialogContent>
+                <DialogActions>
+                <Button
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        onClick={onSubmit}
+                    >
+                        Create Provider
+                    </Button>
+                </DialogActions>
+            </BootstrapDialog>
+            
+        </div>
+    )
+}

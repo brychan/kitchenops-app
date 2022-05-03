@@ -220,7 +220,7 @@ export default function AutocompleteCategories({ value, setValue, labels, sx }) 
                                     ref={params.InputProps.ref}
                                     inputProps={params.inputProps}
                                     autoFocus
-                                    placeholder="Filter labels"
+                                    placeholder="Filter categories"
                                 />
                             )}
                         />

@@ -9,3 +9,14 @@ export async function fetchProviders() {
       }
   }
 }
+
+export async function postProvider(provider) {
+  try {
+    const response = await api.post('/api/providers', provider)
+    return response
+  } catch (error) {
+    if (error & error.response) {
+      return error.response
+    }
+  }
+}

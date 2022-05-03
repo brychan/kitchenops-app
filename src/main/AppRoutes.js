@@ -4,6 +4,7 @@ import AddIngredientPage from '../features/ingredients/pages/AddIngredientPage'
 import ViewAllPage from '../features/ingredients/pages/ViewAllPage'
 import { LogoutPage } from '../features/authentication/LogoutPage'
 import Test from './Test'
+import ProvidersDashboardPage from '../features/providers/pages/ProvidersDashboardPage'
 const AppRoutes = () => {
     return (
         <Routes>
@@ -12,6 +13,9 @@ const AppRoutes = () => {
                 <Route path="add" element={<AddIngredientPage />} />
                 <Route path="all" element={<ViewAllPage />} />
                 <Route path="/ingredients" element={<IngredientsDashboardPage />} />
+            </Route>
+            <Route path="/providers">
+                <Route path="/providers" element={<ProvidersDashboardPage />} />
             </Route>
             <Route path="/" element={<Test />} />
         </Routes>

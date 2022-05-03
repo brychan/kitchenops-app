@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiDrawer from '@mui/material/Drawer'
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import DrawerHeader from './ui/DrawerHeader'
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 
 const Drawer = styled(MuiDrawer, {
     shouldForwardProp: (prop) => prop !== 'open',
@@ -34,15 +35,15 @@ const Drawer = styled(MuiDrawer, {
 
 const DarkTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
-  ))(({ theme }) => ({
+))(({ theme }) => ({
     [`& .${tooltipClasses.arrow}`]: {
-      color: theme.palette.common.black,
+        color: theme.palette.common.black,
     },
     [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: theme.palette.common.black,
-      fontSize: 14
+        backgroundColor: theme.palette.common.black,
+        fontSize: 14,
     },
-  }));
+}))
 
 const drawerWidth = 240
 
@@ -119,9 +120,16 @@ export default function DrawerLayout({ open, handleDrawerClose }) {
             </List>
             <Divider />
             <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                <DarkTooltip
+                    title="Providers"
+                    placement="right"
+                    arrow
+                    sx={{ opacity: open ? 0 : 1 }}
+                >
                     <ListItemButton
-                        key={text}
+                        component={Link}
+                        to="/providers"
+                        key="providers"
                         sx={{
                             minHeight: 48,
                             justifyContent: open ? 'initial' : 'center',
@@ -135,14 +143,14 @@ export default function DrawerLayout({ open, handleDrawerClose }) {
                                 justifyContent: 'center',
                             }}
                         >
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            <LocalShippingIcon />
                         </ListItemIcon>
                         <ListItemText
-                            primary={text}
+                            primary="providers"
                             sx={{ opacity: open ? 1 : 0 }}
                         />
                     </ListItemButton>
-                ))}
+                </DarkTooltip>
             </List>
         </Drawer>
     )

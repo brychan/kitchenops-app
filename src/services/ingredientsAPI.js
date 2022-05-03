@@ -11,6 +11,17 @@ export async function postIngredient(ingredient) {
     }
 }
 
+export async function postCategoryIngredients(category) {
+    try { 
+        const response = await api.post('/api/ingredients/categories', category)
+        return response
+    } catch (error) {
+        if (error && error.response) {
+            return error.response
+        } 
+    }
+}
+
 export async function fetchIngredients(filter) {
     try {
         const response = await api.get('/api/ingredients', {
