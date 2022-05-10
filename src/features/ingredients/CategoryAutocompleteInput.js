@@ -1,5 +1,4 @@
 import * as React from 'react'
-import PropTypes from 'prop-types'
 import { useTheme, styled } from '@mui/material/styles'
 import Popper from '@mui/material/Popper'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
@@ -74,7 +73,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
     },
 }))
 
-export default function AutocompleteCategories({ value, setValue, labels, sx }) {
+export default function CategoryAutocompleteInput({ value, setValue, labels, sx }) {
     const [anchorEl, setAnchorEl] = React.useState(null)
     const [pendingValue, setPendingValue] = React.useState([])
     const theme = useTheme()

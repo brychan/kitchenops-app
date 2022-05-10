@@ -73,7 +73,7 @@ const itemRowArgs = (borderBottom, extraStyles = {}) => {
     }
 }
 
-export default function AddCategoryDialog({
+export default function CategoryCreateDialog({
     handleClose,
     open,
     onSuccess = () => {},
@@ -91,7 +91,6 @@ export default function AddCategoryDialog({
             color: color.hex,
             name: name.value,
         }).then((res) => {
-            console.log(res)
             if (res.status >= 200 && res.status <= 300) {
                 onSuccess(res.data)
                 snackbar.setAlert(

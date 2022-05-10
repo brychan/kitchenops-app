@@ -1,12 +1,16 @@
-import * as React from 'react'
+import { Link } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import { Paper } from '@mui/material/'
+import {
+    Paper,
+    Button,
+    Table,
+    TableCell,
+    TableBody,
+    TableContainer,
+    TableHead,
+    TableRow,
+    tableCellClasses,
+} from '@mui/material/'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -38,16 +42,11 @@ export default function SimpleTable({ data }) {
                             Description
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                            Provider
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                            Provider Code
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
                             Internal Code
                         </StyledTableCell>
                         <StyledTableCell align="right">Active</StyledTableCell>
-                        <StyledTableCell align="center">Added</StyledTableCell>
+                        <StyledTableCell align="right">Added</StyledTableCell>
+                        <StyledTableCell align="right">Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -61,12 +60,6 @@ export default function SimpleTable({ data }) {
                                 {row.brand}
                             </StyledTableCell>
                             <StyledTableCell align="right">
-                                {row.provider && row.provider.name}
-                            </StyledTableCell>
-                            <StyledTableCell align="right">
-                                {row.code_provider}
-                            </StyledTableCell>
-                            <StyledTableCell align="right">
                                 {row.code_internal}
                             </StyledTableCell>
                             <StyledTableCell align="right">
@@ -76,6 +69,16 @@ export default function SimpleTable({ data }) {
                                 {new Intl.DateTimeFormat('en-US').format(
                                     new Date(row.created_at)
                                 )}
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                                <Button
+                                    component={Link}
+                                    to={`/ingredients/view/${row.id}`}
+                                    color="primary"
+                                    variant="outlined"
+                                >
+                                    View & Edit
+                                </Button>
                             </StyledTableCell>
                         </StyledTableRow>
                     ))}

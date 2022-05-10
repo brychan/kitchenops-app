@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@mui/material'
 import { Fragment, useEffect, useState } from 'react'
-import SimpleTable from '../SimpleTable'
+import IngredientSimpleTable from '../IngredientSimpleTable'
 import { fetchIngredients } from '../../../services/ingredientsAPI'
 
 const ViewAllPage = () => {
@@ -9,7 +9,6 @@ const ViewAllPage = () => {
     const [isLoading, setIsLoading] = useState(true)
     useEffect(() => {
         fetchIngredients().then((res) => {
-            console.log(res)
             setIngredients(res)
             setIsLoading(false)
         })
@@ -28,7 +27,7 @@ const ViewAllPage = () => {
             >
                 Add New Ingredient
             </Button>
-            <SimpleTable data={ingredients}/>
+            <IngredientSimpleTable data={ingredients}/>
         </Fragment>
     )
 }

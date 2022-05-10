@@ -18,7 +18,7 @@ const itemRowArgs = (borderBottom, extraStyles = {}) => {
               },
     }
 }
-export const AddProviderForm = ({ name, description }) => {
+const ProviderCreateForm = ({ name, description }) => {
     return (
         <Box
             sx={{
@@ -55,3 +55,5 @@ export const AddProviderForm = ({ name, description }) => {
         </Box>
     )
 }
+
+export default ProviderCreateForm

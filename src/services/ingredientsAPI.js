@@ -11,17 +11,6 @@ export async function postIngredient(ingredient) {
     }
 }
 
-export async function postCategoryIngredients(category) {
-    try { 
-        const response = await api.post('/api/ingredients/categories', category)
-        return response
-    } catch (error) {
-        if (error && error.response) {
-            return error.response
-        } 
-    }
-}
-
 export async function fetchIngredients(filter) {
     try {
         const response = await api.get('/api/ingredients', {
@@ -35,9 +24,53 @@ export async function fetchIngredients(filter) {
     }
 }
 
+export async function fetchOneIngredient(id) {
+    try {
+        const response = await api.get(`/api/ingredients/${id}`)
+        return response.data
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}
+
+export async function postCategoryIngredients(category) {
+    try {
+        const response = await api.post('/api/ingredients/categories', category)
+        return response
+    } catch (error) {
+        if (error && error.response) {
+            return error.response
+        }
+    }
+}
+
 export async function fetchCategoryIngredients() {
     try {
         const response = await api.get('/api/ingredients/categories')
+        return response.data
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}
+
+export async function postPackagingIngredients(packaging) {
+    try {
+        const response = await api.post('/api/ingredients/packaging', packaging)
+        return response
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}
+
+export async function fetchOneIngredientPackagingIngredients(id) {
+    try {
+        const response = await api.get(`/api/ingredients/packaging/${id}`)
         return response.data
     } catch (error) {
         if (error & error.response) {

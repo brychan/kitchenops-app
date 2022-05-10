@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Typography, Box, Paper, Button, Grid, styled } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
-import SimpleTable from '../SimpleTable'
+import IngredientSimpleTable from '../IngredientSimpleTable'
 import { Link } from 'react-router-dom'
 import { fetchIngredients } from '../../../services/ingredientsAPI'
 
@@ -41,7 +41,7 @@ export default function IngredientsDashboard() {
     const lastAddedTable =
         ingredients.lastAdded.results.length > 0 ? (
             <Fragment>
-                <SimpleTable data={ingredients.lastAdded.results} />
+                <IngredientSimpleTable data={ingredients.lastAdded.results} />
                 <Box sx={{ marginY: 4, textAlign: 'right' }}>
                     <Button variant="contained" size="large" color="secondary">
                         See All
@@ -55,7 +55,7 @@ export default function IngredientsDashboard() {
     const missingInfoTable =
         ingredients.missingInfo.results.length > 0 ? (
             <Fragment>
-                <SimpleTable data={[]} />
+                <IngredientSimpleTable data={[]} />
                 <Box sx={{ marginY: 4, textAlign: 'right' }}>
                     <Button variant="contained" size="large" color="secondary">
                         See All

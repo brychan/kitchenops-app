@@ -9,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import { useInput } from '../../hooks/useInput'
-import { AddProviderForm } from './AddProviderForm'
+import ProviderCreateForm from './ProviderCreateForm'
 import { postProvider } from '../../services/providersAPI'
 import { SnackBarContext } from '../../context/SnackBarContext'
 
@@ -51,7 +51,7 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 }
 
-export default function AddProviderDialog({ open, handleClose, onSuccess }) {
+export default function ProviderCreateDialog({ open, handleClose, onSuccess }) {
     const name = useInput('')
     const description = useInput('')
     const snackbar = useContext(SnackBarContext)
@@ -61,7 +61,6 @@ export default function AddProviderDialog({ open, handleClose, onSuccess }) {
             name: name.value,
             description: description.value,
         }).then((res) => {
-          console.log(res.status)
             if (res.status >= 200 && res.status <= 300) {
                 onSuccess(res.data)
                 snackbar.setAlert(
@@ -90,7 +89,7 @@ export default function AddProviderDialog({ open, handleClose, onSuccess }) {
                 Create New Provider
             </BootstrapDialogTitle>
             <DialogContent dividers>
-                <AddProviderForm name={name} description={description} />
+                <ProviderCreateForm name={name} description={description} />
             </DialogContent>
             <DialogActions>
                 <Button
