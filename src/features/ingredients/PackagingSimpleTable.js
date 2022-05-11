@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
+import { useTheme } from '@mui/system'
+
 import {
     Paper,
     Button,
@@ -32,6 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }))
 
 export default function PackagingSimpleTable({ data }) {
+    const theme = useTheme()
     const _typeToLoad = { Weight: 'Kg', Volume: 'Lt' }
 
     return (
@@ -95,7 +98,7 @@ export default function PackagingSimpleTable({ data }) {
                                     : `${row.price}$ per Bundle`}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                                <Typography variant="h6">
+                                <Typography variant="h6" sx={{color: theme.palette.secondary.main}}>
                                     {row.type === 'by_weight'
                                         ? row.price
                                         : row.type === 'by_unit'
