@@ -26,6 +26,8 @@ function useRouteMatch(patterns) {
 function LinkedTabs({id}) {
     // Add routes in descendent orders.
     const routeMatch = useRouteMatch([
+        '/ingredients/view/:ingredientId/nutritional',
+        '/ingredients/view/:ingredientId/allergens',
         '/ingredients/view/:ingredientId/packaging',
         '/ingredients/view/:ingredientId',
     ])
@@ -43,6 +45,18 @@ function LinkedTabs({id}) {
                 label="Prices & Packaging"
                 value="/ingredients/view/:ingredientId/packaging"
                 to={`/ingredients/view/${id}/packaging`}
+                component={Link}
+            />
+            <Tab
+                label="Allergens"
+                value="/ingredients/view/:ingredientId/allergens"
+                to={`/ingredients/view/${id}/allergens`}
+                component={Link}
+            />
+            <Tab
+                label="Nutritional Information"
+                value="/ingredients/view/:ingredientId/nutritional"
+                to={`/ingredients/view/${id}/nutritional`}
                 component={Link}
             />
         </Tabs>

@@ -7,6 +7,8 @@ import ProvidersDashboardPage from '../features/providers/pages/ProvidersDashboa
 import ViewIngredientPage from '../features/ingredients/pages/ViewIngredientPage'
 import TabPackaging from '../features/ingredients/pages/TabPackaging'
 import TabBasicInformation from '../features/ingredients/pages/TabBasicInformation'
+import TabAllergens from '../features/ingredients/pages/TabAllergens'
+import TabNutritionalPage from '../features/ingredients/pages/TabNutritionalPage'
 
 const AppRoutes = () => {
     return (
@@ -19,6 +21,8 @@ const AppRoutes = () => {
                     <Route path=":ingredientId" element={<ViewIngredientPage />}>
                         <Route index element={<TabBasicInformation />} />
                         <Route path="packaging" element={<TabPackaging />} />
+                        <Route path="allergens" element={<TabAllergens />} />
+                        <Route path="nutritional" element={<TabNutritionalPage />} />
                     </Route>
                 </Route>
                 <Route

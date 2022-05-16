@@ -56,7 +56,30 @@ export async function fetchCategoryIngredients() {
         }
     }
 }
+export async function fetchOneAllergensIngredients(id) {
+    try {
+        const response = await api.get(`/api/ingredients/allergens/${id}`)
+        return response.data
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}
 
+export async function patchAllergensIngredients(allergens) {
+    try {
+        const response = await api.patch(
+            `/api/ingredients/allergens/${allergens.id}`,
+            allergens
+        )
+        return response
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}
 export async function postPackagingIngredients(packaging) {
     try {
         const response = await api.post('/api/ingredients/packaging', packaging)
