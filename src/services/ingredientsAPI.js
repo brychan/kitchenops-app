@@ -56,6 +56,30 @@ export async function fetchCategoryIngredients() {
         }
     }
 }
+
+export async function fetchOneNutritionIngredients(id) {
+    try {
+        const response = await api.get(`/api/ingredients/nutrition/${id}`)
+        return response.data
+    } catch (error) {
+        if (error & error.response) {
+            return error.response
+        }
+    }
+}
+export async function patchNutritionIngredients(nutrition) {
+    try {
+        const response = await api.patch(
+            `/api/ingredients/nutrition/${nutrition.id}`,
+            nutrition
+        )
+        return response
+    } catch (error) {
+        if (error && error.response) {
+            return error.response
+        }
+    }
+}
 export async function fetchOneAllergensIngredients(id) {
     try {
         const response = await api.get(`/api/ingredients/allergens/${id}`)

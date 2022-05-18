@@ -40,7 +40,7 @@ const TabAllergens = () => {
     const handleSave = () => {
         patchAllergensIngredients(state.allergens)
             .then((res) => {
-                if (res.status >= 200 && res.status <= 300) {
+                if (res.status >= 200 && res.status <= 300 && res.data === 1) {
                     setState({ ...state, isEdit: false })
                     snackbar.setAlert('success', `Allergens have been updated.`)
                 } else
